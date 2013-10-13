@@ -1,11 +1,10 @@
 class Phrase
-
   def initialize(sentence)
     @sentence = sentence
   end
 
   def word_count
-    words.inject(Hash.new(0)) { |stats, word| stats[word] += 1; stats }
+    words.each_with_object(Hash.new(0)) { |word, stats| stats[word] += 1 }
   end
 
   private
