@@ -1,7 +1,6 @@
 class Hamming
   def initialize(strand1, strand2)
-    @strand1 = strand1.split(//)
-    @strand2 = strand2.split(//)
+    @strand1, @strand2 = strand1, strand2
   end
 
   def self.compute(strand1, strand2)
