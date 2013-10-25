@@ -4,42 +4,60 @@ class PhoneNumber
   end
 
   def number
-    invalid? ?  invalid_sequence : final
+    Validator.format(@sequence)
   end
 
   def area_code
-    final[0..2]
+    number[0..2]
   end
 
   def to_s
-    '(' + area_code + ')' + " " + final[3..5] + '-' + final[6..-1]
+    "(#{area_code}) #{exchange}-#{line}"
   end
 
   private
 
-  attr_reader :sequence
-
-  def final
-    valid_with_one? ? clean[1..-1] : clean
+  def exchange
+    number[3..5]
   end
 
-  def valid_with_one?
-    clean.length > 10 && clean.start_with?('1')
+  def line
+    number[6..-1]
+  end
+end
+
+class Validator
+  def initialize(sequence)
+    @sequence = sequence
   end
 
-  def invalid?
-    clean.length < 10 || (clean.length > 10 && !clean.start_with?('1'))
+  def self.format(sequence)
+    new(sequence).format
   end
 
-  def clean
-    sequence.tr(invalid_chars, '')
+  def format
+     valid? ? national : invalid
   end
 
-  def invalid_sequence
+  private
+
+  def valid?
+    national.length == 10
+  end
+
+  def national
+    country_code? ? digits[1..-1] : digits
+  end
+
+  def country_code?
+    digits.length > 10 && digits.start_with?('1')
+  end
+
+  def digits
+    @sequence.tr('^0-9', '')
+  end
+
+  def invalid
     "0000000000"
-  end
-
-  def invalid_chars
-    '^A-Za-z0-9'
   end
 end
