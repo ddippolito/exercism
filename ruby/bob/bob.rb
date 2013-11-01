@@ -1,29 +1,25 @@
 class Bob
   def hey(msg)
-    switch(
-      shouting: -> {'Woah, chill out!'},
-      question: -> {'Sure,'},
-      silent: -> {'Fine. Be that way'}
-    )
+    case msg
+    when shouting then 'Woah, chill out!'
+    when question then 'Sure.'
+    when silent then 'Fine. Be that way!'
+    else
+      'Whatever.'
+    end
   end
 
   private
 
-  def switch(hash)
-    hash.each { |method, proc| p "#{method}    #{send(method)}"}
-    hash.each { |method, proc| return proc[] if send(method) }
-    yield if block_given?
-  end
-
   def shouting
-    msg == msg.upcase && !msg.strip.empty?
+    lambda { |msg| msg == msg.upcase && !msg.strip.empty? }
   end
 
   def question
-    msg[-1, 1] == "?"
+    lambda { |msg| msg[-1, 1] == "?" }
   end
 
   def silent
-    msg.strip.empty?
+    lambda { |msg| msg.strip.empty? }
   end
 end
