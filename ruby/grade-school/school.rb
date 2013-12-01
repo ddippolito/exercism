@@ -12,12 +12,16 @@ class School
   end
 
   def sort
-    Hash[sort_students]
+    Hash[grade_sort]
   end
 
   private
 
-  def sort_students
-    db.each_pair { |k,v| db[k] = v.sort }.sort
+  def grade_sort
+    students_sort.sort
+  end
+
+  def students_sort
+    db.each { |_, students| students.sort! }
   end
 end
