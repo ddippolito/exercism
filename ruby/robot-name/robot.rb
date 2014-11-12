@@ -4,15 +4,19 @@ class Robot
   end
 
   def name
-    @name = Factory.assign_name
+    @name ||= boot
   end
+
+  private
+
+  def boot
+    @name = Factory.construct
+  end
+
 end
 
 class Factory
-  def initialise
-  end
-
-  def self.assign_name
+  def self.construct
     new.generate
   end
 
@@ -23,6 +27,10 @@ class Factory
   private
 
   def model
-    ('a'..'z').to_a + :qa
+    ('A'..'Z').to_a
+  end
+
+  def serial
+    ('1'..'9').to_a
   end
 end
